@@ -1,10 +1,9 @@
 # Earthquake-app
-Earthquake app
 
-Earthquake app gets latest earthquakes from USGS api.
+The earthquake app gets the latest earthquakes from USGS API.
 
-Requirements: 
-You need google map api key to use the app.
+Requirements: You need a google Maps API key to use the app.
+
 
 In this project you'll find:
 
