@@ -14,6 +14,6 @@ In this project you'll find:
 * Uses **[Hilt](https://dagger.dev/hilt/)** for dependency injection
 * Google map, plus marker clustering.
 * Retrofit for networking.
-* Room database for Repositorie.
+* Room database for Repository.
 
 
