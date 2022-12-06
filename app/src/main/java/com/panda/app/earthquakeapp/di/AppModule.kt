@@ -1,4 +1,4 @@
-package com.panda.app.earthquakeapp.inject
+package com.panda.app.earthquakeapp.di
 
 import android.app.Application
 import android.content.Context
@@ -12,7 +12,6 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.panda.app.earthquakeapp.data.common.Constants
 import com.panda.app.earthquakeapp.data.common.Constants.USER_PREFERENCES
-import com.panda.app.earthquakeapp.data.database.DatabaseQuake
 import com.panda.app.earthquakeapp.data.database.QuakeDatabase
 import com.panda.app.earthquakeapp.data.remote.QuakeApi
 import com.panda.app.earthquakeapp.data.repository.QuakeRepositoryImpl

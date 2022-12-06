@@ -13,7 +13,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.SettingsClient
-import com.panda.app.earthquakeapp.MainActivity.Companion.GPS_REQUEST
+import com.panda.app.earthquakeapp.data.common.Constants.GPS_REQUEST
 
 class GpsUtils(private val context: Context) {
 

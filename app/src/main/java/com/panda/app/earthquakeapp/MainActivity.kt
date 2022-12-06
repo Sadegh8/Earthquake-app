@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.panda.app.earthquakeapp.utils.TopBar
 import com.panda.app.earthquakeapp.ui.theme.EarthquakeAppTheme
@@ -32,9 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @OptIn(ExperimentalAnimationApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    companion object {
-        const val GPS_REQUEST = 109
-    }
+
     private lateinit var viewModel: MainActivityViewModel
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +78,7 @@ class MainActivity : ComponentActivity() {
                     }
                 })
 
-                if (locationPermissionState.hasPermission) {
+                if (locationPermissionState.status.isGranted) {
                     viewModel.initLocation()
                 }
                 // A surface container using the 'background' color from the theme

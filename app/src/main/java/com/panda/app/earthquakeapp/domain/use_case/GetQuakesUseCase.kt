@@ -1,5 +1,7 @@
 package com.panda.app.earthquakeapp.domain.use_case
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.panda.app.earthquakeapp.data.common.Resource
 import com.panda.app.earthquakeapp.data.database.QuakeDatabase
@@ -14,22 +16,24 @@ import javax.inject.Inject
 
 class GetQuakesUseCase @Inject constructor(
     private val repository: QuakeRepository,
-    val quakeDatabase: QuakeDatabase
+    private val quakeDatabase: QuakeDatabase,
+    private val context: Application
 ) {
     operator fun invoke(): Flow<Resource<List<Quake>>> = flow {
         var quakes = repository.getQuakes()
         if (quakes.isEmpty()) {
             emit(Resource.Loading())
+        }else {
+            emit(Resource.Success(quakes))
         }
-        emit(Resource.Success(quakes))
         try {
-            if (Utils.shouldRefresh(quakes)) {
+            if (Utils.shouldRefresh(quakes, context)) {
                 emit(Resource.Loading())
-                quakeDatabase.dao.clearOldData()
                 repository.refreshQuakes()
                 quakes = repository.getQuakes()
                 if (quakes.isNotEmpty()) {
                     emit(Resource.Success(quakes))
+                    quakeDatabase.dao.clearOldData(quakes[quakes.size - 1].time)
                 }
             }
 

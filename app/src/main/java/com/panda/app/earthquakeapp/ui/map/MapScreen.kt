@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -61,7 +62,7 @@ fun GoogleMapClustering(
         mutableStateOf(
             MapProperties(
                 mapType = MapType.NORMAL,
-                isMyLocationEnabled = locationPermissionState.hasPermission
+                isMyLocationEnabled = locationPermissionState.status.isGranted
             )
         )
     }

@@ -85,13 +85,13 @@ class LocationHelper(private val context: Context) {
         }
     }
 
-
     companion object {
-        val locationRequest: LocationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 2000
-            priority =  Priority.PRIORITY_BALANCED_POWER_ACCURACY
-        }
+        val locationRequest: LocationRequest =
+            LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 5000)
+                .setWaitForAccurateLocation(false)
+                .setMinUpdateIntervalMillis(2000)
+                .setMaxUpdateDelayMillis(20000)
+                .build()
 
     }
 

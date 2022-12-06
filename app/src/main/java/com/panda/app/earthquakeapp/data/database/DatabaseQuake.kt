@@ -10,13 +10,13 @@ import java.util.concurrent.Flow
 @Entity(tableName = "quakeDatabase")
 data class DatabaseQuake constructor(
     @PrimaryKey val id: String,
-    val title: String,
-    val time: Long,
-    val url: String,
-    val magnitude: Double,
-    val latitude: Double,
-    val longitude: Double,
-    val depth: Double
+    val title: String = "",
+    val time: Long = System.currentTimeMillis(),
+    val url: String = "",
+    val magnitude: Double = 0.0,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    val depth: Double = 0.0
 )
 
 fun DatabaseQuake.toQuake(): Quake {

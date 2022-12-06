@@ -5,14 +5,13 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
 import android.net.ConnectivityManager
-import android.util.Log
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.panda.app.earthquakeapp.domain.model.Quake
-import java.net.InetAddress
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,7 +55,10 @@ object Utils {
     /**
      * Check if should refresh quake list
      */
-    fun shouldRefresh(quakes: List<Quake>): Boolean {
+    fun shouldRefresh(quakes: List<Quake>, context: Context): Boolean {
+        if (!context.isNetworkConnected) {
+            return false
+        }
             if (quakes.isEmpty()) {
                 return true
             } else {
@@ -75,6 +77,19 @@ object Utils {
         return true
     }
 
-
+    private val Context.isNetworkConnected: Boolean
+        get() {
+            val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                manager.getNetworkCapabilities(manager.activeNetwork)?.let {
+                    it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ||
+                            it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                } ?: false
+            else
+                @Suppress("DEPRECATION")
+                manager.activeNetworkInfo?.isConnectedOrConnecting == true
+        }
 
 }

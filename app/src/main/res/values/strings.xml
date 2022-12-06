@@ -2,4 +2,5 @@
     <string name="app_name">EarthquakeApp</string>
     <string name="settings">Settings</string>
     <string name="nav_map">Map</string>
+    <string name="latest">Latest</string>
 </resources>

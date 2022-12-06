@@ -23,6 +23,6 @@ interface QuakeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(quakes: List<DatabaseQuake>)
 
-    @Query("DELETE FROM quakeDatabase")
-    suspend fun clearOldData()
+    @Query("DELETE FROM quakeDatabase WHERE time < :time")
+    suspend fun clearOldData(time: Long)
 }

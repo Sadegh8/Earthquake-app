@@ -2,16 +2,18 @@ package com.panda.app.earthquakeapp.ui.detail
 
 import android.Manifest
 import android.location.Location
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -40,7 +42,7 @@ fun DetailScreen(
 }
 
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun Map(
     modifier: Modifier = Modifier,
@@ -51,6 +53,7 @@ private fun Map(
     val locationPermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
+    val density = LocalDensity.current
     val uiSettings = remember {
         MapUiSettings(zoomControlsEnabled = false, myLocationButtonEnabled = true)
     }
@@ -58,7 +61,7 @@ private fun Map(
         mutableStateOf(
             MapProperties(
                 mapType = MapType.NORMAL,
-                isMyLocationEnabled = locationPermissionState.hasPermission,
+                isMyLocationEnabled = locationPermissionState.status.isGranted,
                 )
         )
     }
@@ -105,7 +108,13 @@ private fun Map(
                 .fillMaxWidth()
                 .height(160.dp)
                 .padding(start = 16.dp, end = 16.dp, bottom = 30.dp)
-                .align(Alignment.BottomCenter)) {
+                .align(Alignment.BottomCenter), enter = slideInVertically {
+                with(density) { -50.dp.roundToPx() }
+            } + expandVertically(
+                expandFrom = Alignment.Top
+            ) + fadeIn(
+                initialAlpha = 0.25f
+            ) , exit = slideOutVertically() + shrinkVertically() + fadeOut() ) {
             quakeM?.let { quake ->
                 MapCardInfo(
                     modifier = Modifier
