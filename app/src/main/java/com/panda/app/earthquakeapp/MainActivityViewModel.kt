@@ -15,7 +15,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val context: Application,
-    val locationHelper : LocationHelper,
     userPreferencesRepository: UserPreferencesRepository
 
 ): ViewModel() {
@@ -34,21 +33,10 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun initLocation() {
-        if (notSaveYet) {
-            locationHelper.start()
-            notSaveYet = false
-        }
-    }
 
     fun changeTheme(dark: Boolean) {
         viewModelScope.launch {
             _darkTheme.send(dark)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        locationHelper.stop()
     }
 }

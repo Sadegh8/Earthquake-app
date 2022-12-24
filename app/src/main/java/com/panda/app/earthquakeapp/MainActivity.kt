@@ -42,9 +42,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val context = LocalContext.current
-            val location = viewModel.locationHelper.locationStateFlow.collectAsState(
-                initial = null
-            )
+
             val dark by viewModel.darkTheme.collectAsState(
                 initial = isSystemInDarkTheme()
             )
@@ -78,9 +76,9 @@ class MainActivity : ComponentActivity() {
                     }
                 })
 
-                if (locationPermissionState.status.isGranted) {
-                    viewModel.initLocation()
-                }
+//                if (locationPermissionState.status.isGranted) {
+//                    viewModel.initLocation()
+//                }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -132,7 +130,6 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             padding = padding,
                             scaffoldState = scaffoldState,
-                            location = location,
                             viewModel = viewModel
 
                         )

@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.panda.app.earthquakeapp.data.QuakeMapItem
 import com.panda.app.earthquakeapp.domain.model.Quake
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,8 +19,42 @@ import java.util.*
 
 object Utils {
 
-    fun formatDate(dateObject: Long): String {
+    val fakeListQuake = listOf(
+        Quake(
+            id = "0",
+            title = "USA",
+            time = Date().time,
+            "https://www.google.com/",
+            4.4,
+            LatLng(0.0, 43.4),
+            56.5
+        ),
+        Quake(
+            id = "0",
+            title = "Japan",
+            time = Date().time - 90000,
+            "https://www.google.com/",
+            5.2,
+            LatLng(0.0, 43.4),
+            46.5
+        )
+    )
+    val fakeListQuakeMap = listOf(
+        QuakeMapItem(
+            id = "0",
+            itemTitle = "USA",
+            itemSnippet = "",
+            itemPosition =  LatLng(0.0, 43.4)
+        ),
+        QuakeMapItem(
+            id = "0",
+            itemTitle = "Japan",
+            itemSnippet = "",
+            itemPosition = LatLng(0.0, 43.4),
+        )
+    )
 
+    fun formatDate(dateObject: Long): String {
         val dateFormat =
             SimpleDateFormat("LLL dd, yyyy, HH:mm", Locale.getDefault())
         return dateFormat.format(dateObject)
@@ -55,10 +90,7 @@ object Utils {
     /**
      * Check if should refresh quake list
      */
-    fun shouldRefresh(quakes: List<Quake>, context: Context): Boolean {
-        if (!context.isNetworkConnected) {
-            return false
-        }
+    fun shouldRefresh(quakes: List<Quake>): Boolean {
             if (quakes.isEmpty()) {
                 return true
             } else {
@@ -76,20 +108,5 @@ object Utils {
 
         return true
     }
-
-    private val Context.isNetworkConnected: Boolean
-        get() {
-            val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                manager.getNetworkCapabilities(manager.activeNetwork)?.let {
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                            it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                            it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ||
-                            it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-                } ?: false
-            else
-                @Suppress("DEPRECATION")
-                manager.activeNetworkInfo?.isConnectedOrConnecting == true
-        }
 
 }

@@ -25,7 +25,6 @@ internal fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     padding: PaddingValues,
-    location: State<Location?>,
     scaffoldState: ScaffoldState,
     viewModel: MainActivityViewModel
 ) {
@@ -41,12 +40,10 @@ internal fun AppNavigation(
         addMain(
             navController,
             padding = padding,
-            scaffoldState = scaffoldState,
-            location = location
-        )
-        addMap(navController, padding = padding, scaffoldState = scaffoldState, location = location)
+            scaffoldState = scaffoldState)
+        addMap(navController, padding = padding, scaffoldState = scaffoldState)
         addSettings(viewModel = viewModel)
-        addDetail(location = location)
+        addDetail()
     }
 }
 
@@ -55,7 +52,6 @@ internal fun AppNavigation(
 private fun NavGraphBuilder.addMain(
     navController: NavController,
     padding: PaddingValues,
-    location: State<Location?>,
     scaffoldState: ScaffoldState,
 ) {
 
@@ -79,7 +75,6 @@ private fun NavGraphBuilder.addMain(
 private fun NavGraphBuilder.addMap(
     navController: NavController,
     padding: PaddingValues,
-    location: State<Location?>,
     scaffoldState: ScaffoldState,
 ) {
     composable(
@@ -92,7 +87,6 @@ private fun NavGraphBuilder.addMap(
             },
             modifier = Modifier.padding(padding),
             scaffoldState = scaffoldState,
-            location = location
         )
     }
 }
@@ -111,7 +105,7 @@ private fun NavGraphBuilder.addSettings(viewModel: MainActivityViewModel) {
 }
 
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addDetail(location: State<Location?>) {
+private fun NavGraphBuilder.addDetail() {
     composable(
         route = Routes.DETAILS + "?quakeId={quakeId}",
         arguments = listOf(
@@ -123,7 +117,7 @@ private fun NavGraphBuilder.addDetail(location: State<Location?>) {
         )
     )
     {
-        DetailScreen(location = location)
+        DetailScreen()
     }
 }
 

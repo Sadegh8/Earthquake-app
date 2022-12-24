@@ -8,14 +8,16 @@ import com.panda.app.earthquakeapp.data.common.Resource
 import com.panda.app.earthquakeapp.domain.model.toQuakeMap
 import com.panda.app.earthquakeapp.domain.use_case.GetQuakesUseCase
 import com.panda.app.earthquakeapp.ui.home.QuakeState
+import com.panda.app.earthquakeapp.utils.location.LocationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val quakesUseCase: GetQuakesUseCase
-): ViewModel() {
+    private val quakesUseCase: GetQuakesUseCase,
+    val locationHelper: LocationHelper,
+    ): ViewModel() {
 
     private val _state = mutableStateOf(QuakeState())
 
@@ -26,6 +28,7 @@ class MapViewModel @Inject constructor(
     private var listItem: MutableList<QuakeMapItem> = emptyList<QuakeMapItem>().toMutableList()
 
     init {
+        locationHelper.start()
         getQuakes()
     }
 
@@ -51,5 +54,10 @@ class MapViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationHelper.stop()
     }
 }

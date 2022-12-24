@@ -2,7 +2,9 @@ package com.panda.app.earthquakeapp.domain.use_case
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import com.panda.app.earthquakeapp.data.common.Resource
 import com.panda.app.earthquakeapp.data.database.QuakeDatabase
 import com.panda.app.earthquakeapp.domain.model.Quake
@@ -27,7 +29,8 @@ class GetQuakesUseCase @Inject constructor(
             emit(Resource.Success(quakes))
         }
         try {
-            if (Utils.shouldRefresh(quakes, context)) {
+            val isNetworkConnected = context.checkNetwork
+            if (Utils.shouldRefresh(quakes) && isNetworkConnected) {
                 emit(Resource.Loading())
                 repository.refreshQuakes()
                 quakes = repository.getQuakes()
@@ -43,5 +46,21 @@ class GetQuakesUseCase @Inject constructor(
             emit(Resource.Error("Couldn't reach server. Check your internet connection."))
         }
     }
+
+    private val Context.checkNetwork: Boolean
+        get() {
+            val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                manager.getNetworkCapabilities(manager.activeNetwork)?.let {
+                    it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ||
+                            it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                } ?: false
+            else
+                @Suppress("DEPRECATION")
+                manager.activeNetworkInfo?.isConnectedOrConnecting == true
+        }
+
 
 }

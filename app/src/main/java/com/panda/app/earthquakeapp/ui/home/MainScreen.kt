@@ -17,24 +17,48 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.maps.model.LatLng
+import com.panda.app.earthquakeapp.domain.model.Quake
 import com.panda.app.earthquakeapp.ui.home.components.QuakeItem
 import com.panda.app.earthquakeapp.utils.Routes
 import com.panda.app.earthquakeapp.utils.UiEvent
+import com.panda.app.earthquakeapp.utils.Utils
+import java.util.Date
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLifecycleComposeApi::class)
 
+//Stateful version
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState? = null,
     viewModel: MainViewModel = hiltViewModel(),
     onNavigate: (UiEvent.Navigate) -> Unit,
+
+    ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    MainScreen(
+        modifier = modifier,
+        quakeState = state,
+        onNavigate = onNavigate,
+        scaffoldState = scaffoldState
+    )
+
+}
+
+//Stateless version
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    scaffoldState: ScaffoldState? = null,
+    quakeState: QuakeState,
+    onNavigate: (UiEvent.Navigate) -> Unit,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle(initialValue = QuakeState())
 
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(state.quakes) { quake ->
+            items(quakeState.quakes) { quake ->
                 QuakeItem(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 8.dp, bottom = 16.dp, top = 8.dp)
@@ -55,9 +79,11 @@ fun MainScreen(
             }
         }
 
-        if (state.isLoading ) {
-            CircularProgressIndicator(modifier =
-            Modifier.align(if (state.quakes.isEmpty()) Alignment.Center else Alignment.TopCenter))
+        if (quakeState.isLoading) {
+            CircularProgressIndicator(
+                modifier =
+                Modifier.align(if (quakeState.quakes.isEmpty()) Alignment.Center else Alignment.TopCenter)
+            )
         }
     }
 }
@@ -65,5 +91,7 @@ fun MainScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(onNavigate = {})
+    MainScreen(quakeState = QuakeState(
+        quakes = Utils.fakeListQuake
+    ), onNavigate = {})
 }

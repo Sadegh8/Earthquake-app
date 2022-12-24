@@ -44,5 +44,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+
     }
 }
