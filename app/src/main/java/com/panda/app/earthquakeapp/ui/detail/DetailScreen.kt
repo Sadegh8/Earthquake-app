@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -26,14 +28,14 @@ import kotlinx.coroutines.delay
 import java.util.*
 
 //Stateful version
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
-    val quake by viewModel.quake.collectAsState(initial = null)
-    val location by viewModel.locationHelper.locationStateFlow.collectAsState(initial = null)
+    val quake by viewModel.quake.collectAsStateWithLifecycle(initialValue = null)
+    val location by viewModel.locationHelper.locationStateFlow.collectAsStateWithLifecycle(initialValue  = null)
     val locationPermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION
     )

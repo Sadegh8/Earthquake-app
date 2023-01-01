@@ -54,7 +54,6 @@ private fun NavGraphBuilder.addMain(
     padding: PaddingValues,
     scaffoldState: ScaffoldState,
 ) {
-
     composable(
         route = Routes.MAIN
     )

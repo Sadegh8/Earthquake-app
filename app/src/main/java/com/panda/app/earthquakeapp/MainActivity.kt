@@ -8,6 +8,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -20,7 +22,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.panda.app.earthquakeapp.utils.TopBar
 import com.panda.app.earthquakeapp.ui.theme.EarthquakeAppTheme
@@ -35,12 +36,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: MainActivityViewModel
-    @OptIn(ExperimentalPermissionsApi::class)
+    @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         setContent {
+            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
+
             val context = LocalContext.current
 
             val dark by viewModel.darkTheme.collectAsState(
@@ -49,12 +52,13 @@ class MainActivity : ComponentActivity() {
             var askPermission by remember {
                 mutableStateOf(true)
             }
+            val locationPermissionState = rememberPermissionState(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            val lifecycleOwner = LocalLifecycleOwner.current
+
             EarthquakeAppTheme(darkTheme = dark) {
 
-                val locationPermissionState = rememberPermissionState(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-                val lifecycleOwner = LocalLifecycleOwner.current
                 DisposableEffect(key1 = lifecycleOwner, effect = {
                     val observer = LifecycleEventObserver { _, event ->
                         if (event == Lifecycle.Event.ON_RESUME) {
@@ -91,11 +95,7 @@ class MainActivity : ComponentActivity() {
 
                     // Control BottomBar
                     when (navBackStackEntry?.destination?.route) {
-                        Routes.MAIN -> {
-                            // Show BottomBar
-                            bottomBarState.value = true
-                        }
-                        Routes.MAP -> {
+                        Routes.MAIN, Routes.MAP -> {
                             // Show BottomBar
                             bottomBarState.value = true
                         }
