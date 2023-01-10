@@ -18,7 +18,8 @@ In this project you'll find:
 * Retrofit for networking.
 * Room database for Repository.
 
-![Screenshot_20230110_192322](https://user-images.githubusercontent.com/18060023/211603028-0c8d940d-1c59-4f81-9f19-74dc1ec682ee.png)
-![Screenshot_20230110_192412](https://user-images.githubusercontent.com/18060023/211603078-1b1cc5a4-66ee-4d1f-a7c5-165cbaa4179a.png)
-![Screenshot_20230110_192429](https://user-images.githubusercontent.com/18060023/211603094-8d9fd833-7a15-4e44-af61-8c6d2cfc890c.png)
+
+![Screenshot_20230110_192322](https://user-images.githubusercontent.com/18060023/211604809-7166123e-0e2a-44b7-bb9a-1613b372252c.png)
+![Screenshot_20230110_192412](https://user-images.githubusercontent.com/18060023/211604824-73bae2d7-dd33-48fc-83c3-72f5129dd839.png)
+![Screenshot_20230110_192429](https://user-images.githubusercontent.com/18060023/211604834-03cd9fc1-8131-4c35-b97a-00674b9e63cb.png)
 
