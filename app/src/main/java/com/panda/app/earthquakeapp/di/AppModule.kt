@@ -63,12 +63,6 @@ object AppModule {
     }
 
 
-    @Provides
-    @Singleton
-    fun provideQuakeRepository(api: QuakeApi, quakeDatabase: QuakeDatabase): QuakeRepository {
-        return QuakeRepositoryImpl(api, quakeDatabase)
-    }
-
     @Singleton
     @Provides
     fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
