@@ -57,10 +57,6 @@ fun MainScreen(
     quakeState: QuakeState,
     onNavigate: (UiEvent.Navigate) -> Unit,
 ) {
-    val isTrue = true
-
-   
-
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize(), state = rememberLazyListState()) {
             items(quakeState.quakes) { quake ->
