@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.LatLng
 import com.panda.app.earthquakeapp.domain.model.Quake
 import com.panda.app.earthquakeapp.ui.home.components.QuakeItem
+import com.panda.app.earthquakeapp.ui.util.preview.DevicePreview
 import com.panda.app.earthquakeapp.utils.Routes
 import com.panda.app.earthquakeapp.utils.UiEvent
 import com.panda.app.earthquakeapp.utils.Utils
@@ -89,7 +90,9 @@ fun MainScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+//@Preview(showBackground = true, showSystemUi = true)
+//DevicePreview shows three devices in same time phone
+@DevicePreview
 @Composable
 fun MainScreenPreview() {
     MainScreen(quakeState = QuakeState(
