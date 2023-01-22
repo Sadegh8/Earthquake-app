@@ -37,6 +37,7 @@ class MainActivityViewModel @Inject constructor(
     fun changeTheme(dark: Boolean) {
         viewModelScope.launch {
             _darkTheme.send(dark)
+
         }
     }
 }

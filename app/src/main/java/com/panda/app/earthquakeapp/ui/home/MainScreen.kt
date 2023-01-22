@@ -7,30 +7,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.maps.model.LatLng
-import com.panda.app.earthquakeapp.domain.model.Quake
 import com.panda.app.earthquakeapp.ui.home.components.QuakeItem
 import com.panda.app.earthquakeapp.ui.util.preview.DevicePreview
 import com.panda.app.earthquakeapp.utils.Routes
 import com.panda.app.earthquakeapp.utils.UiEvent
 import com.panda.app.earthquakeapp.utils.Utils
-import java.util.Date
 
 
 //Stateful version
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
@@ -39,7 +29,7 @@ fun MainScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
 
     ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state = viewModel.state
     MainScreen(
         modifier = modifier,
         quakeState = state,
