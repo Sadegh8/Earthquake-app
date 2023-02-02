@@ -1,9 +1,10 @@
 package com.panda.app.earthquakeapp.ui.home
 
-import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.panda.app.earthquakeapp.data.common.Resource
@@ -16,12 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val quakesUseCase: GetQuakesUseCase
-): ViewModel() {
+) : ViewModel() {
 
-    private val _state: MutableStateFlow<QuakeState> = MutableStateFlow(QuakeState())
-    val state: StateFlow<QuakeState>
-        get() = _state.asStateFlow()
+    var state by mutableStateOf(QuakeState())
+        private set
 
+    val d = Snapshot.takeSnapshot { }
     init {
         viewModelScope.launch {
             getQuakes()
@@ -30,19 +31,20 @@ class MainViewModel @Inject constructor(
 
     private suspend fun getQuakes() {
         quakesUseCase().onEach { result ->
-            when (result) {
+            state = when (result) {
                 is Resource.Success -> {
-                    _state.emit(QuakeState(quakes = result.data ?: emptyList()))
+                    (QuakeState(quakes = result.data ?: emptyList()))
                 }
                 is Resource.Error -> {
-                    _state.emit( QuakeState(
+                    (QuakeState(
                         error = result.message ?: "An unexpected error occurred"
                     ))
                 }
                 is Resource.Loading -> {
-                    _state.emit(_state.value.copy(isLoading = true))
+                    state.copy(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
+
     }
 }

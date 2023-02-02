@@ -1,18 +1,17 @@
 package com.panda.app.earthquakeapp.utils
 
-import android.location.Location
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.panda.app.earthquakeapp.MainActivityViewModel
+import com.panda.app.earthquakeapp.ui.main.MainActivityViewModel
 import com.panda.app.earthquakeapp.ui.detail.DetailScreen
 import com.panda.app.earthquakeapp.ui.map.MapScreen
 import com.panda.app.earthquakeapp.ui.settings.SettingsScreen
@@ -25,9 +24,9 @@ internal fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     padding: PaddingValues,
-    location: State<Location?>,
-    scaffoldState: ScaffoldState,
-    viewModel: MainActivityViewModel
+    snackbarHostState: SnackbarHostState,
+    viewModel: MainActivityViewModel,
+    goUp: MutableState<Boolean>
 ) {
     AnimatedNavHost(
         navController = navController,
@@ -41,12 +40,10 @@ internal fun AppNavigation(
         addMain(
             navController,
             padding = padding,
-            scaffoldState = scaffoldState,
-            location = location
-        )
-        addMap(navController, padding = padding, scaffoldState = scaffoldState, location = location)
-        addSettings(viewModel = viewModel)
-        addDetail(location = location)
+            snackbarHostState = snackbarHostState, goUp)
+        addMap(navController, padding = padding, snackbarHostState = snackbarHostState)
+        addSettings(viewModel = viewModel, modifier = modifier.padding(padding))
+        addDetail()
     }
 }
 
@@ -55,10 +52,9 @@ internal fun AppNavigation(
 private fun NavGraphBuilder.addMain(
     navController: NavController,
     padding: PaddingValues,
-    location: State<Location?>,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
+    goUp: MutableState<Boolean>
 ) {
-
     composable(
         route = Routes.MAIN
     )
@@ -68,7 +64,8 @@ private fun NavGraphBuilder.addMain(
                 navController.navigate(it.route)
             },
             modifier = Modifier.padding(padding),
-            scaffoldState = scaffoldState
+            snackbarHostState = snackbarHostState,
+            goUp =  goUp
         )
     }
 
@@ -79,8 +76,7 @@ private fun NavGraphBuilder.addMain(
 private fun NavGraphBuilder.addMap(
     navController: NavController,
     padding: PaddingValues,
-    location: State<Location?>,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState
 ) {
     composable(
         route = BottomNavItem.Map.screen_route
@@ -91,27 +87,26 @@ private fun NavGraphBuilder.addMap(
                 navController.navigate(it.route)
             },
             modifier = Modifier.padding(padding),
-            scaffoldState = scaffoldState,
-            location = location
+            snackbarHostState = snackbarHostState
         )
     }
 }
 
 
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addSettings(viewModel: MainActivityViewModel) {
+private fun NavGraphBuilder.addSettings(viewModel: MainActivityViewModel, modifier: Modifier) {
     composable(
         route = Routes.SETTINGS
     )
     {
-        SettingsScreen(onTheme = {
+        SettingsScreen(modifier = modifier,onTheme = {
             viewModel.changeTheme(it.dark)
         })
     }
 }
 
 @ExperimentalAnimationApi
-private fun NavGraphBuilder.addDetail(location: State<Location?>) {
+private fun NavGraphBuilder.addDetail() {
     composable(
         route = Routes.DETAILS + "?quakeId={quakeId}",
         arguments = listOf(
@@ -123,7 +118,7 @@ private fun NavGraphBuilder.addDetail(location: State<Location?>) {
         )
     )
     {
-        DetailScreen(location = location)
+        DetailScreen()
     }
 }
 

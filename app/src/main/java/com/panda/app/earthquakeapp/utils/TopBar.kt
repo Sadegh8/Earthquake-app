@@ -2,13 +2,10 @@ package com.panda.app.earthquakeapp.utils
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -20,6 +17,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.panda.app.earthquakeapp.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
@@ -67,12 +65,10 @@ fun TopBar(
                     )
                 }
 
-
             }
 
         },
-        elevation = 0.dp,
-        backgroundColor = Color.Transparent
+
     )
 
 
