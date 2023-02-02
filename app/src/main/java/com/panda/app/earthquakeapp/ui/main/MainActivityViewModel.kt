@@ -1,4 +1,4 @@
-package com.panda.app.earthquakeapp
+package com.panda.app.earthquakeapp.ui.main
 
 import android.app.Application
 import androidx.datastore.preferences.core.booleanPreferencesKey

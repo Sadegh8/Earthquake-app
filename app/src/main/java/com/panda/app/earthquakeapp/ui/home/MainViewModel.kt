@@ -4,6 +4,7 @@ package com.panda.app.earthquakeapp.ui.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.panda.app.earthquakeapp.data.common.Resource
@@ -17,10 +18,11 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val quakesUseCase: GetQuakesUseCase
 ) : ViewModel() {
-    
+
     var state by mutableStateOf(QuakeState())
         private set
 
+    val d = Snapshot.takeSnapshot { }
     init {
         viewModelScope.launch {
             getQuakes()

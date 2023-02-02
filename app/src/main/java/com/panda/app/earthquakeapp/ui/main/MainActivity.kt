@@ -1,4 +1,4 @@
-package com.panda.app.earthquakeapp
+package com.panda.app.earthquakeapp.ui.main
 
 import android.Manifest
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
@@ -36,7 +37,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var viewModel: MainActivityViewModel
-    @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
+
+    @OptIn(
+        ExperimentalPermissionsApi::class, ExperimentalMaterial3WindowSizeClassApi::class,
+        ExperimentalMaterial3Api::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
@@ -86,12 +91,13 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colorScheme.background
                 ) {
 
                     val navController = rememberAnimatedNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+                    val goUp = rememberSaveable { (mutableStateOf(false)) }
 
                     // Control BottomBar
                     when (navBackStackEntry?.destination?.route) {
@@ -106,20 +112,20 @@ class MainActivity : ComponentActivity() {
                     }
 
 
-                    val scaffoldState = rememberScaffoldState()
+                    val snackbarHostState = remember { SnackbarHostState() }
+
 
                     Scaffold(
+                        snackbarHost = { SnackbarHost(snackbarHostState) },
                         bottomBar = {
-                            BottomNav(navController = navController, bottomBarState)
+                            BottomNav(navController = navController, bottomBarState, goUp)
                         },
-                        scaffoldState = scaffoldState,
                         topBar = {
                             TopBar(
                                 Modifier,
                                 navController,
                                 bottomBarState,
                                 navBackStackEntry,
-
                                 )
                         },
 
@@ -129,8 +135,9 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             navController = navController,
                             padding = padding,
-                            scaffoldState = scaffoldState,
-                            viewModel = viewModel
+                            snackbarHostState = snackbarHostState,
+                            viewModel = viewModel,
+                            goUp = goUp
 
                         )
                     }

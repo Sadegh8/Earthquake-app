@@ -4,7 +4,7 @@ import android.Manifest
 import android.location.Location
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +34,7 @@ import kotlinx.coroutines.withContext
 fun MapScreen(
     modifier: Modifier = Modifier,
     viewModel: MapViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState? = null,
+    snackbarHostState: SnackbarHostState? = null,
     onNavigate: (UiEvent.Navigate) -> Unit
 ) {
 
@@ -44,14 +44,14 @@ fun MapScreen(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
-    MapScreen(modifier = modifier, scaffoldState = scaffoldState, location = location, quakes = quakes, permissionsEnable = locationPermissionState.status.isGranted, onNavigate = onNavigate)
+    MapScreen(modifier = modifier,  snackbarHostState= snackbarHostState, location = location, quakes = quakes, permissionsEnable = locationPermissionState.status.isGranted, onNavigate = onNavigate)
 }
 
 //StateFul less
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,
-    scaffoldState: ScaffoldState? = null,
+    snackbarHostState: SnackbarHostState? = null,
     location: Location?,
     quakes: List<QuakeMapItem>,
     permissionsEnable: Boolean,
@@ -104,11 +104,13 @@ fun GoogleMapClustering(
         ) {
             var clusterManager by remember { mutableStateOf<ClusterManager<QuakeMapItem>?>(null) }
             MapEffect(items) { map ->
-                if (clusterManager == null) {
-                    clusterManager = ClusterManager<QuakeMapItem>(context, map)
-                }
-                clusterManager?.renderer = MarkerClusterRenderer(context, map, clusterManager)
-                clusterManager?.addItems(items)
+                    if (clusterManager == null) {
+                        clusterManager = ClusterManager<QuakeMapItem>(context, map)
+                    }
+
+                    clusterManager?.renderer = MarkerClusterRenderer(context, map, clusterManager)
+                    clusterManager?.addItems(items)
+
 
                 clusterManager?.setOnClusterItemInfoWindowClickListener {
                     coroutineScope.launch {

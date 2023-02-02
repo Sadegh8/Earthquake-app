@@ -3,8 +3,9 @@ package com.panda.app.earthquakeapp.ui.detail.components
 import android.location.Location
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,7 @@ fun MapCardInfo(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        elevation = 8.dp,
+        elevation = CardDefaults.cardElevation(8.dp),
     ) {
         Column(Modifier.fillMaxSize()) {
             Row(

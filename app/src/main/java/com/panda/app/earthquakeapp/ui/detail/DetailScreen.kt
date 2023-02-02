@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -24,11 +23,10 @@ import com.panda.app.earthquakeapp.utils.Utils
 import com.panda.app.earthquakeapp.R
 import com.panda.app.earthquakeapp.domain.model.Quake
 import com.panda.app.earthquakeapp.ui.detail.components.MapCardInfo
-import kotlinx.coroutines.delay
 import java.util.*
 
 //Stateful version
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,

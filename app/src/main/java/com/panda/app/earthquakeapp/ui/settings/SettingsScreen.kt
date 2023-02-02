@@ -3,9 +3,7 @@ package com.panda.app.earthquakeapp.ui.settings
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,16 +16,29 @@ import com.panda.app.earthquakeapp.utils.UiEvent
 
 @Composable
 fun SettingsScreen(
+    modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = hiltViewModel(),
     onTheme: (UiEvent.ChangeTheme) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    SettingsScreen(modifier = modifier, isDark = viewModel.darkTheme, onChange = {
+        viewModel.changeDarkTheme(it)
+        onTheme(UiEvent.ChangeTheme(it))
+    })
+}
+
+@Composable
+fun SettingsScreen(
+    modifier: Modifier = Modifier,
+    isDark: Boolean? = false,
+    onChange: (Boolean) -> Unit,
+) {
+    Column(modifier = modifier) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
-            elevation = 8.dp
+            elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Column {
 
@@ -35,10 +46,9 @@ fun SettingsScreen(
 
                 SwitchItem(
                     title = "Dark theme",
-                    check = viewModel.darkTheme ?: isSystemInDarkTheme(),
+                    check = isDark ?: isSystemInDarkTheme(),
                     onChange = {
-                        viewModel.changeDarkTheme(it)
-                        onTheme(UiEvent.ChangeTheme(it))
+                        onChange(it)
                     }
                 )
             }
@@ -57,7 +67,7 @@ fun SwitchItem(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(0.dp),
-        elevation = 0.dp
+        elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Row(
             modifier = Modifier.padding(8.dp),
@@ -87,5 +97,5 @@ fun SwitchItem(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen(onTheme = {UiEvent.ChangeTheme(false)})
+    SettingsScreen(isDark = false, onChange = { })
 }

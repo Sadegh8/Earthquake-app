@@ -3,9 +3,11 @@ package com.panda.app.earthquakeapp.utils
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -22,8 +24,8 @@ import com.panda.app.earthquakeapp.ui.theme.Purple500
 
 
 @Composable
-fun BottomNav(navController: NavController, bottomBarState: MutableState<Boolean>) {
-    val isLightTheme = MaterialTheme.colors.isLight
+fun BottomNav(navController: NavController, bottomBarState: MutableState<Boolean>, goUp: MutableState<Boolean> ) {
+    val isLightTheme = isSystemInDarkTheme()
 
     val items = remember {
         listOf(
@@ -36,15 +38,14 @@ fun BottomNav(navController: NavController, bottomBarState: MutableState<Boolean
         enter = slideInVertically(initialOffsetY = { it }),
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
-            BottomNavigation(
-                backgroundColor = MaterialTheme.colors.surface,
-                elevation = 10.dp
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
                 items.forEach { item ->
-                    BottomNavigationItem(
+                    NavigationBarItem(
                         icon = {
                             Icon(
                                 imageVector = item.icon,
@@ -52,15 +53,11 @@ fun BottomNav(navController: NavController, bottomBarState: MutableState<Boolean
                             )
                         },
                         label = { Text(text = stringResource(id = item.title)) },
-
-                        selectedContentColor = Purple500,
-                        unselectedContentColor = if (isLightTheme) {
-                            Color.DarkGray.copy(0.5f)
-                        } else {
-                            Color.White.copy(0.5f)
-                        },
                         selected = currentRoute == item.screen_route,
                         onClick = {
+                            if (currentRoute == Routes.MAIN) {
+                                goUp.value = true
+                            }
                             navController.navigate(item.screen_route) {
 
                                 popUpTo(navController.graph.findStartDestination().id) {
