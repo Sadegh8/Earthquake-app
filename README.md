@@ -8,7 +8,7 @@ Requirements: You need a google Maps API key to use the app.
 In this project you'll find:
 
 * Entirely written in Kotlin.
-* MVI architecture. 
+* Clean architecture. 
 * Use Cases
 * UI completely written in **[Jetpack Compose](https://developer.android.com/jetpack/compose)**
 * Kotlin **[Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)**
@@ -16,7 +16,6 @@ In this project you'll find:
 * Google map, plus marker clustering.
 * Retrofit for networking.
 * Room database for Repository.
-* Use Cases
 
 
 ![Screenshot_20230110_192322](https://user-images.githubusercontent.com/18060023/211604809-7166123e-0e2a-44b7-bb9a-1613b372252c.png)
